@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="PhD Tracker">
+  <meta name="theme-color" content="#4f46e5">
+  <title>PhD Humanities Tracker - India Admissions</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Top Header / App Bar -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm font-semibold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-1.5">
+            <h1 class="text-base font-bold text-slate-900 leading-tight">PhD Tracker India</h1>
+            <span id="connectionBadge" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">
+              <span class="w-1.5 h-1.5 mr-1 rounded-full bg-emerald-500 animate-pulse"></span> PWA Ready
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">Humanities & Social Sciences Admissions</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-1.5">
+        <button id="alertsSubscribeBtn" class="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg border border-amber-200 bg-amber-50 text-amber-800 text-xs font-semibold hover:bg-amber-100 active:scale-95 transition" title="Get SMS & Email Notifications">
+          <svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+          </svg>
+          <span class="hidden sm:inline">Alerts</span>
+        </button>
+
+        <button id="installAppBtn" class="hidden flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 active:scale-95 shadow-sm transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>Install</span>
+        </button>
+
+        <button id="addListingBtn" class="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-semibold hover:bg-indigo-100 active:scale-95 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="hidden sm:inline">Add</span>
+        </button>
+
+        <button id="savedFilterBtn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition">
+          <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          </svg>
+          <span>Saved</span>
+          <span id="savedCountBadge" class="bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 py-4 w-full flex-1">
+    
+    <!-- Install & Alerts Banner (Android & iOS) -->
+    <div id="pwaBanner" class="mb-3 p-3 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+      <div class="flex items-center space-x-2.5">
+        <span class="text-lg">📱</span>
+        <div>
+          <span class="font-bold text-slate-900">Install on Android & iOS:</span>
+          <span class="text-slate-600 block sm:inline sm:ml-1">Works seamlessly as a native phone app with offline support and zero ads.</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+        <button id="installGuideBtn" class="px-3 py-1 bg-white hover:bg-slate-50 text-indigo-700 border border-indigo-200 rounded-lg font-semibold text-[11px] transition shadow-xs">
+          How to Install
+        </button>
+      </div>
+    </div>
+
+    <!-- Urgent Deadlines Alert Banner -->
+    <div id="urgentAlertBox" class="mb-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/90 flex items-center justify-between text-xs text-amber-900">
+      <div class="flex items-center space-x-2">
+        <span class="text-base">⏳</span>
+        <span><strong class="font-semibold">Closing Soon:</strong> Applications closing in under 10 days!</span>
+      </div>
+      <button id="filterClosingSoonBtn" class="px-2.5 py-1 bg-amber-200/60 hover:bg-amber-200 text-amber-950 rounded-lg font-semibold transition text-[11px]">
+        View Urgent
+      </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="relative mb-3">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search university, subject, or eligibility (e.g., JNU, English, JRF)..." 
+        class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-slate-400 shadow-sm transition"
+      >
+      <button id="clearSearchBtn" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Filter Pills Section -->
+    <div class="space-y-2 mb-4">
+      <!-- Status Filters -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+        <span class="text-slate-400 font-medium whitespace-nowrap mr-1">Status:</span>
+        <button data-filter-status="all" class="status-pill active px-3 py-1 rounded-full bg-slate-900 text-white font-medium whitespace-nowrap shadow-sm transition">All</button>
+        <button data-filter-status="Open" class="status-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Open Now</button>
+        <button data-filter-status="Upcoming" class="status-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Upcoming</button>
+        <button data-filter-status="Rolling" class="status-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Rolling / Bi-Annual</button>
+      </div>
+
+      <!-- Subject Filters -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+        <span class="text-slate-400 font-medium whitespace-nowrap mr-1">Discipline:</span>
+        <button data-filter-subject="all" class="subject-pill active px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-medium whitespace-nowrap border border-indigo-200 transition">All Humanities</button>
+        <button data-filter-subject="Literature" class="subject-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Literature & Languages</button>
+        <button data-filter-subject="History" class="subject-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">History & Archaeology</button>
+        <button data-filter-subject="Philosophy" class="subject-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Philosophy</button>
+        <button data-filter-subject="Social Sciences" class="subject-pill px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium whitespace-nowrap hover:bg-slate-50 transition">Social Sciences & Policy</button>
+      </div>
+    </div>
+
+    <!-- Active Listings Count & Calendar Bulk Export -->
+    <div class="flex items-center justify-between text-xs text-slate-500 mb-3 px-1">
+      <span id="resultsCount">Showing listings...</span>
+      <div class="flex items-center space-x-3">
+        <button id="exportAllCalBtn" class="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 font-medium transition" title="Export all active deadlines to your Calendar app">
+          <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span>Sync Calendar</span>
+        </button>
+        <button id="refreshSyncBtn" class="flex items-center space-x-1 text-indigo-600 hover:text-indigo-800 font-medium transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Container -->
+    <div id="listingsGrid" class="space-y-3.5">
+      <!-- Cards rendered via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden py-12 text-center">
+      <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <p class="text-sm font-medium text-slate-700">No matching PhD programs found</p>
+      <p class="text-xs text-slate-400 mt-1">Try resetting your filters or adjusting your search keywords.</p>
+      <button id="resetFiltersBtn" class="mt-3 px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition">Reset All Filters</button>
+    </div>
+
+  </main>
+
+  <!-- SMS & Email Alerts Subscription Modal -->
+  <div id="alertsModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-100 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">Email & SMS Admission Alerts</h2>
+            <p class="text-[11px] text-slate-500">Instant updates when new humanities spots open</p>
+          </div>
+        </div>
+        <button id="closeAlertsModalBtn" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="alertsForm" class="mt-4 space-y-3 text-xs">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Email Address</label>
+          <input type="email" id="alertEmail" required placeholder="scholar@university.ac.in" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Mobile / WhatsApp Number</label>
+          <div class="flex">
+            <span class="inline-flex items-center px-2.5 rounded-l-lg border border-r-0 border-slate-200 bg-slate-50 text-slate-500 text-xs font-medium">+91</span>
+            <input type="tel" id="alertPhone" pattern="[0-9]{10}" required placeholder="9876543210" class="w-full px-3 py-2 rounded-r-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+          <p class="text-[10px] text-slate-400 mt-0.5">Used exclusively for critical closing-date SMS/WhatsApp alerts</p>
+        </div>
+
+        <div>
+          <label class="block font-medium text-slate-700 mb-1.5">Alert Preferences</label>
+          <div class="space-y-1.5 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+              <span class="text-slate-700">Urgent closing alerts (≤ 7 days remaining)</span>
+            </label>
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+              <span class="text-slate-700">Central Universities & IITs announcement alerts</span>
+            </label>
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+              <span class="text-slate-700">Fellowship & Stipend revisions</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" id="cancelAlertsModalBtn" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 shadow-sm transition">Activate Alerts</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Install Guide Modal (Android & iOS instructions) -->
+  <div id="installGuideModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-100 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h2 class="text-sm font-bold text-slate-900">Add to Home Screen (No App Store Needed)</h2>
+        <button id="closeInstallGuideBtn" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4 text-xs">
+        <!-- Android Instructions -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="flex items-center space-x-2 mb-1.5">
+            <span class="text-base">🤖</span>
+            <span class="font-bold text-slate-900">On Android (Chrome / Firefox / Edge):</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-600 leading-relaxed pl-1">
+            <li>Tap the <strong class="text-slate-800">three dots (⋮)</strong> menu in the top right corner.</li>
+            <li>Select <strong class="text-indigo-600">"Install app"</strong> or <strong class="text-indigo-600">"Add to Home screen"</strong>.</li>
+            <li>Tap <strong>Install</strong>. The app will appear in your app drawer just like a Play Store app.</li>
+          </ol>
+        </div>
+
+        <!-- iOS Instructions -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="flex items-center space-x-2 mb-1.5">
+            <span class="text-base">🍏</span>
+            <span class="font-bold text-slate-900">On iPhone / iPad (Safari):</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-600 leading-relaxed pl-1">
+            <li>Tap the <strong class="text-slate-800">Share button</strong> (square with an arrow pointing up at the bottom).</li>
+            <li>Scroll down and tap <strong class="text-indigo-600">"Add to Home Screen"</strong>.</li>
+            <li>Tap <strong>Add</strong> in the top right corner.</li>
+          </ol>
+        </div>
+
+        <button id="dismissInstallGuideBtn" class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition">
+          Got It!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Listing Modal -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-100 animate-in fade-in duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Post New PhD Application Alert</h2>
+          <p class="text-[11px] text-slate-500">Add an open university doctoral cycle</p>
+        </div>
+        <button id="closeModalBtn" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="addListingForm" class="mt-4 space-y-3 text-xs">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">University Name</label>
+          <input type="text" id="modalUnivName" required placeholder="e.g. Jadavpur University" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Location</label>
+            <input type="text" id="modalLocation" required placeholder="e.g. Kolkata, West Bengal" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Status</label>
+            <select id="modalStatus" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="Open">Open Now</option>
+              <option value="Upcoming">Upcoming</option>
+              <option value="Rolling">Rolling</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Department / Subject</label>
+          <input type="text" id="modalDept" required placeholder="e.g. Department of Comparative Literature" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Application Deadline</label>
+          <input type="date" id="modalDeadline" required class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Portal Registration URL</label>
+          <input type="url" id="modalUrl" required placeholder="https://..." class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        </div>
+
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" id="cancelModalBtn" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 shadow-sm transition">Save Alert</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mobile Footer / Install Prompt Banner & Creator Credit -->
+  <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-4xl mx-auto flex flex-col items-center justify-center space-y-2">
+      <div class="flex items-center space-x-3 text-[11px] text-slate-600 font-medium">
+        <span>⚡ Zero Bloatware</span>
+        <span>•</span>
+        <span>🛡️ Direct Official Portals</span>
+        <span>•</span>
+        <span>📲 Full iOS & Android Support</span>
+      </div>
+      
+      <!-- Creator Credit -->
+      <div class="pt-2 border-t border-slate-100 w-full text-center">
+        <p class="text-[11px] text-slate-500 font-normal">
+          This application was created by <span class="font-semibold text-slate-800">Vatsal Kumar (Archidyll)</span>
+        </p>
+        <p class="text-[10px] text-slate-400 mt-0.5">Dedicated to supporting Indian Humanities & Social Sciences Doctoral Scholars</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+    Notification text
+  </div>
+
+  <script>
+    // Database of Humanities PhD Admissions in India with Exact Deadlines
+    const defaultPhdData = [
+      {
+        id: "jnu-humanities",
+        name: "Jawaharlal Nehru University (JNU)",
+        location: "New Delhi",
+        type: "Central University",
+        department: "School of Language, Literature & Culture / SSS",
+        subjects: ["Literature", "History", "Philosophy", "Social Sciences"],
+        cycle: "Winter / Monsoon Cycle",
+        deadlineText: "25 Nov 2026",
+        deadlineDate: "2026-11-25T23:59:59",
+        status: "Open",
+        eligibility: ["UGC-NET / JRF", "GATE (select)", "Interview"],
+        registrationUrl: "https://jnuee.jnu.ac.in/",
+        infoUrl: "https://www.jnu.ac.in/admissions",
+        description: "Premier research school offering doctoral spots in Linguistics, English, Indian Languages, History, and Philosophy.",
+        stipend: "UGC JRF / Non-NET Fellowship applicable"
+      },
+      {
+        id: "du-humanities",
+        name: "University of Delhi (DU)",
+        location: "New Delhi",
+        type: "Central University",
+        department: "Faculty of Arts & Faculty of Social Sciences",
+        subjects: ["Literature", "History", "Philosophy", "Social Sciences"],
+        cycle: "Ph.D. Phase Admissions Cycle",
+        deadlineText: "20 Nov 2026",
+        deadlineDate: "2026-11-20T23:59:59",
+        status: "Open",
+        eligibility: ["UGC-NET / JRF", "UoD Written Test", "Interview"],
+        registrationUrl: "https://phd2026.uod.ac.in/",
+        infoUrl: "https://admission.uod.ac.in/",
+        description: "Covers Delhi University departments in English, Hindi, History, Philosophy, Sanskrit, and Sociology with multiple intake phases.",
+        stipend: "Institutional / UGC Fellowship"
+      },
+      {
+        id: "uoh-humanities",
+        name: "University of Hyderabad (UoH)",
+        location: "Hyderabad, Telangana",
+        type: "Institution of Eminence / Central University",
+        department: "School of Humanities & School of Social Sciences",
+        subjects: ["Literature", "History", "Philosophy", "Social Sciences"],
+        cycle: "January / July Dual Session",
+        deadlineText: "18 Nov 2026",
+        deadlineDate: "2026-11-18T23:59:59",
+        status: "Open",
+        eligibility: ["UGC-NET / JRF Qualified", "UoH Entrance Test"],
+        registrationUrl: "https://acad.uohyd.ac.in/",
+        infoUrl: "https://uohyd.ac.in/",
+        description: "Top-ranked institution offering English, Comparative Literature, Sanskrit Studies, Applied Linguistics, History, and Philosophy.",
+        stipend: "Full institute / UGC research support"
+      },
+      {
+        id: "tiss-social-sciences",
+        name: "Tata Institute of Social Sciences (TISS)",
+        location: "Mumbai & Campuses",
+        type: "Deemed University",
+        department: "School of Social Work, Human Ecology & Social Sciences",
+        subjects: ["Social Sciences", "Philosophy"],
+        cycle: "Annual Doctoral Admissions 2026-27",
+        deadlineText: "Opening Soon (Dec)",
+        deadlineDate: "2026-12-15T23:59:59",
+        status: "Upcoming",
+        eligibility: ["UGC-NET Score (Cat 2 & 3)", "JRF", "Research Proposal + OPI"],
+        registrationUrl: "https://admissions.tiss.ac.in/",
+        infoUrl: "https://tiss.ac.in/",
+        description: "Renowned social research programs emphasizing critical theory, social justice, human rights, and public policy.",
+        stipend: "Government & Tata fellowships"
+      },
+      {
+        id: "iitd-hss",
+        name: "IIT Delhi (Department of HSS)",
+        location: "New Delhi",
+        type: "Institute of National Importance",
+        department: "Department of Humanities & Social Sciences",
+        subjects: ["Literature", "Philosophy", "Social Sciences"],
+        cycle: "Semester 1 (Autumn) & Semester 2 (Spring)",
+        deadlineText: "30 Nov 2026",
+        deadlineDate: "2026-11-30T23:59:59",
+        status: "Rolling",
+        eligibility: ["UGC-NET (LS or JRF)", "GATE HSS (XH)", "Master's 55%+"],
+        registrationUrl: "https://hss.iitd.ac.in/admission",
+        infoUrl: "https://home.iitd.ac.in/pg-admissions.php",
+        description: "High-impact interdisciplinary doctoral research in Literature, Philosophy, Economics, Sociology, and Science & Technology Studies.",
+        stipend: "Institute Assistantship (MoE) ~₹37,000/mo + HRA"
+      },
+      {
+        id: "iitk-hss",
+        name: "IIT Kanpur (Department of HSS)",
+        location: "Kanpur, Uttar Pradesh",
+        type: "Institute of National Importance",
+        department: "Humanities & Social Sciences",
+        subjects: ["Literature", "Philosophy", "Social Sciences"],
+        cycle: "Regular Semester Admissions (Winter Session)",
+        deadlineText: "28 Nov 2026",
+        deadlineDate: "2026-11-28T23:59:59",
+        status: "Open",
+        eligibility: ["GATE (XH) top 5% or UGC-NET/JRF", "Interview"],
+        registrationUrl: "https://www.iitk.ac.in/hss/admissions",
+        infoUrl: "https://www.iitk.ac.in/",
+        description: "Doctoral tracks in English Literature, Philosophy (Epistemology, Ethics, Mind), Sociology, and Psychology.",
+        stipend: "Full Institute Fellowship for regular scholars"
+      },
+      {
+        id: "iith-la",
+        name: "IIT Hyderabad (Department of Liberal Arts)",
+        location: "Kandi, Telangana",
+        type: "Institute of National Importance",
+        department: "Department of Liberal Arts",
+        subjects: ["Literature", "Cultural Studies", "Social Sciences"],
+        cycle: "Regular Intake - January & July Sessions",
+        deadlineText: "Opening in Dec 2026",
+        deadlineDate: "2026-12-10T23:59:59",
+        status: "Upcoming",
+        eligibility: ["UGC-NET / JRF", "GATE (XH)", "Written Test & Interview"],
+        registrationUrl: "https://iith.ac.in/phdadmissions/",
+        infoUrl: "https://iith.ac.in/",
+        description: "Cutting-edge research in Cultural Studies, English Literature, Visual Arts, Economics, and Social Anthropology.",
+        stipend: "MoE Institute Fellowship with hostel support"
+      },
+      {
+        id: "bits-hss",
+        name: "BITS Pilani (Doctoral Admissions)",
+        location: "Pilani, Goa, Hyderabad Campuses",
+        type: "Institute of Eminence (Private)",
+        department: "Humanities and Social Sciences",
+        subjects: ["Literature", "Philosophy", "Social Sciences"],
+        cycle: "2nd Semester AY Admissions (Jan Session)",
+        deadlineText: "22 Nov 2026",
+        deadlineDate: "2026-11-22T23:59:59",
+        status: "Open",
+        eligibility: ["Master's degree 60%+", "Written test & Interview"],
+        registrationUrl: "https://admissions.bits-pilani.ac.in/PhD/phd.html",
+        infoUrl: "https://admissions.bits-pilani.ac.in/",
+        description: "Full-time research programs with modern digital humanities, ethical theory, and language studies.",
+        stipend: "Institutional Fellowship ₹34,000–₹37,000/mo"
+      }
+    ];
+
+    // State
+    let phdData = [...defaultPhdData];
+    let currentStatus = "all";
+    let currentSubject = "all";
+    let searchQuery = "";
+    let showSavedOnly = false;
+    let savedIds = [];
+    let deferredPrompt = null;
+
+    // Safely load local storage data (Offline Database Persistence)
+    try {
+      const storedSaved = localStorage.getItem("phd_saved_ids");
+      if (storedSaved) savedIds = JSON.parse(storedSaved);
+
+      const customItems = localStorage.getItem("phd_custom_entries");
+      if (customItems) {
+        const parsed = JSON.parse(customItems);
+        phdData = [...parsed, ...phdData];
+      }
+
+      localStorage.setItem("phd_offline_cache", JSON.stringify(phdData));
+    } catch (e) {
+      savedIds = [];
+    }
+
+    // DOM Elements
+    const listingsGrid = document.getElementById("listingsGrid");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const resultsCount = document.getElementById("resultsCount");
+    const savedCountBadge = document.getElementById("savedCountBadge");
+    const savedFilterBtn = document.getElementById("savedFilterBtn");
+    const resetFiltersBtn = document.getElementById("resetFiltersBtn");
+    const filterClosingSoonBtn = document.getElementById("filterClosingSoonBtn");
+    const refreshSyncBtn = document.getElementById("refreshSyncBtn");
+    const exportAllCalBtn = document.getElementById("exportAllCalBtn");
+    const toast = document.getElementById("toast");
+    const installAppBtn = document.getElementById("installAppBtn");
+
+    // Modal Elements
+    const addListingBtn = document.getElementById("addListingBtn");
+    const addModal = document.getElementById("addModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const cancelModalBtn = document.getElementById("cancelModalBtn");
+    const addListingForm = document.getElementById("addListingForm");
+
+    // Alerts Modal Elements
+    const alertsSubscribeBtn = document.getElementById("alertsSubscribeBtn");
+    const alertsModal = document.getElementById("alertsModal");
+    const closeAlertsModalBtn = document.getElementById("closeAlertsModalBtn");
+    const cancelAlertsModalBtn = document.getElementById("cancelAlertsModalBtn");
+    const alertsForm = document.getElementById("alertsForm");
+
+    // Install Guide Modal Elements
+    const installGuideBtn = document.getElementById("installGuideBtn");
+    const installGuideModal = document.getElementById("installGuideModal");
+    const closeInstallGuideBtn = document.getElementById("closeInstallGuideBtn");
+    const dismissInstallGuideBtn = document.getElementById("dismissInstallGuideBtn");
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.remove("opacity-0");
+      toast.classList.add("opacity-100");
+      setTimeout(() => {
+        toast.classList.remove("opacity-100");
+        toast.classList.add("opacity-0");
+      }, 2400);
+    }
+
+    function updateSavedBadge() {
+      savedCountBadge.textContent = savedIds.length;
+    }
+
+    function toggleSave(id) {
+      const idx = savedIds.indexOf(id);
+      if (idx > -1) {
+        savedIds.splice(idx, 1);
+        showToast("Removed from saved list");
+      } else {
+        savedIds.push(id);
+        showToast("Saved to your list");
+      }
+      try {
+        localStorage.setItem("phd_saved_ids", JSON.stringify(savedIds));
+      } catch (e) {}
+      updateSavedBadge();
+      renderListings();
+    }
+
+    // Dynamic Countdown Calculator
+    function calculateDaysRemaining(targetIsoString) {
+      if (!targetIsoString) return null;
+      const target = new Date(targetIsoString).getTime();
+      const now = new Date("2026-11-12T11:00:00").getTime();
+      const diff = target - now;
+      if (diff <= 0) return 0;
+      return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function getCountdownBadge(deadlineDate, status) {
+      if (status === "Upcoming") {
+        return `<span class="inline-flex items-center text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  🗓️ Portal Opens Soon
+                </span>`;
+      }
+      const days = calculateDaysRemaining(deadlineDate);
+      if (days === null) return '';
+      
+      if (days <= 0) {
+        return `<span class="inline-flex items-center text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                  ⛔ Registration Closed
+                </span>`;
+      } else if (days <= 7) {
+        return `<span class="inline-flex items-center text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded animate-pulse">
+                  🔥 Only ${days} day${days === 1 ? '' : 's'} left!
+                </span>`;
+      } else if (days <= 14) {
+        return `<span class="inline-flex items-center text-[11px] font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                  ⏳ ${days} days remaining
+                </span>`;
+      } else {
+        return `<span class="inline-flex items-center text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                  ✨ ${days} days remaining
+                </span>`;
+      }
+    }
+
+    // One-Tap iCalendar (.ics) Generator
+    function generateIcsEvent(item) {
+      const cleanDate = (item.deadlineDate || "2026-11-30T23:59:59").replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const eventContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//PhD Tracker India//Admissions Portal//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        `UID:phd-${item.id}-${Date.now()}@phdtracker.in`,
+        `DTSTAMP:${cleanDate}`,
+        `DTSTART:${cleanDate}`,
+        `DTEND:${cleanDate}`,
+        `SUMMARY:PhD Application Deadline: ${item.name}`,
+        `DESCRIPTION:Deadline for ${item.department}. Register at: ${item.registrationUrl}`,
+        `URL:${item.registrationUrl}`,
+        `LOCATION:${item.location}`,
+        "STATUS:CONFIRMED",
+        "BEGIN:VALARM",
+        "TRIGGER:-P1D",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:Reminder: PhD application closes tomorrow!",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      const blob = new Blob([eventContent], { type: "text/calendar;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute("download", `${item.id}-deadline.ics`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("📅 Calendar event (.ics) generated!");
+    }
+
+    function exportAllToCalendar() {
+      const activeItems = getFilteredData().filter(i => i.deadlineDate);
+      if (activeItems.length === 0) {
+        showToast("No active deadlines to export");
+        return;
+      }
+      activeItems.slice(0, 3).forEach((item, index) => {
+        setTimeout(() => generateIcsEvent(item), index * 300);
+      });
+      showToast(`Exported ${Math.min(activeItems.length, 3)} admission reminders to calendar!`);
+    }
+
+    // Android PWA Install Support
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installAppBtn.classList.remove('hidden');
+    });
+
+    installAppBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast("Installing app on your home screen...");
+        }
+        deferredPrompt = null;
+        installAppBtn.classList.add('hidden');
+      } else {
+        installGuideModal.classList.remove('hidden');
+      }
+    });
+
+    function getFilteredData() {
+      return phdData.filter(item => {
+        if (currentStatus !== "all" && item.status !== currentStatus) return false;
+        
+        if (currentSubject !== "all") {
+          const match = item.subjects.some(s => s.toLowerCase().includes(currentSubject.toLowerCase()));
+          if (!match) return false;
+        }
+
+        if (showSavedOnly && !savedIds.includes(item.id)) return false;
+
+        if (searchQuery.trim() !== "") {
+          const q = searchQuery.toLowerCase();
+          const inName = item.name.toLowerCase().includes(q);
+          const inDept = item.department.toLowerCase().includes(q);
+          const inLoc = item.location.toLowerCase().includes(q);
+          const inSubs = item.subjects.some(s => s.toLowerCase().includes(q));
+          const inElig = item.eligibility.some(e => e.toLowerCase().includes(q));
+          if (!inName && !inDept && !inLoc && !inSubs && !inElig) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function getStatusBadge(status) {
+      if (status === "Open") {
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Open Now
+                </span>`;
+      } else if (status === "Upcoming") {
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                  <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-amber-500"></span> Upcoming
+                </span>`;
+      } else {
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                  <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-blue-500"></span> Rolling / Bi-Annual
+                </span>`;
+      }
+    }
+
+    function renderListings() {
+      const data = getFilteredData();
+      resultsCount.textContent = `Showing ${data.length} university doctoral program${data.length === 1 ? '' : 's'}`;
+
+      if (data.length === 0) {
+        listingsGrid.innerHTML = "";
+        emptyState.classList.remove("hidden");
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+      listingsGrid.innerHTML = data.map(item => {
+        const isSaved = savedIds.includes(item.id);
+        const countdownHtml = getCountdownBadge(item.deadlineDate, item.status);
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm hover:shadow transition duration-200">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">${item.type}</span>
+                  <span class="text-slate-300">•</span>
+                  <span class="text-[11px] text-slate-500 font-medium">${item.location}</span>
+                </div>
+                <h2 class="text-base font-bold text-slate-900">${item.name}</h2>
+                <p class="text-xs text-slate-600 mt-0.5 font-medium">${item.department}</p>
+              </div>
+              <div class="flex items-center space-x-1">
+                <button 
+                  class="cal-btn p-2 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-slate-50 active:scale-90 transition"
+                  data-id="${item.id}"
+                  title="Add deadline to Calendar"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </button>
+                <button 
+                  class="save-btn p-2 rounded-xl text-slate-400 hover:text-amber-500 hover:bg-slate-50 active:scale-90 transition"
+                  data-id="${item.id}"
+                  title="${isSaved ? 'Remove from saved' : 'Save for later'}"
+                >
+                  <svg class="w-5 h-5 ${isSaved ? 'text-amber-500 fill-amber-500' : 'text-slate-400'}" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Subject Badges & Countdown Row -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mt-2.5">
+              <div class="flex flex-wrap gap-1.5">
+                ${item.subjects.map(s => `<span class="px-2 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-medium rounded-md">${s}</span>`).join('')}
+              </div>
+              <div>${countdownHtml}</div>
+            </div>
+
+            <!-- Info Bar -->
+            <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Status & Deadline</span>
+                <div class="mt-0.5 flex items-center gap-2">
+                  ${getStatusBadge(item.status)}
+                  <span class="text-slate-700 font-semibold">${item.deadlineText || 'Check Portal'}</span>
+                </div>
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Eligibility Mode</span>
+                <span class="text-slate-700 font-medium text-xs mt-0.5 block">${item.eligibility.join(' • ')}</span>
+              </div>
+            </div>
+
+            <p class="mt-2.5 text-xs text-slate-500 leading-relaxed">${item.description}</p>
+            <p class="text-[11px] text-emerald-700 font-medium mt-1">💰 Fellowship: ${item.stipend}</p>
+
+            <!-- Action Buttons -->
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <a 
+                href="${item.infoUrl}" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition flex items-center gap-1"
+              >
+                <span>Brochure / Details</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+
+              <a 
+                href="${item.registrationUrl}" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:scale-95 rounded-xl shadow-sm transition flex items-center gap-1.5"
+              >
+                <span>Register Portal</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach bookmark listeners
+      document.querySelectorAll(".save-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          toggleSave(id);
+        });
+      });
+
+      // Attach Calendar listeners
+      document.querySelectorAll(".cal-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const item = phdData.find(i => i.id === id);
+          if (item) generateIcsEvent(item);
+        });
+      });
+    }
+
+    // Modal Control: Add Listing
+    addListingBtn.addEventListener("click", () => {
+      addModal.classList.remove("hidden");
+    });
+    closeModalBtn.addEventListener("click", () => {
+      addModal.classList.add("hidden");
+    });
+    cancelModalBtn.addEventListener("click", () => {
+      addModal.classList.add("hidden");
+    });
+
+    addListingForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newEntry = {
+        id: "custom-" + Date.now(),
+        name: document.getElementById("modalUnivName").value,
+        location: document.getElementById("modalLocation").value,
+        type: "User Verified Listing",
+        department: document.getElementById("modalDept").value,
+        subjects: ["Humanities & Social Sciences"],
+        cycle: "Active Admissions Window",
+        deadlineText: document.getElementById("modalDeadline").value,
+        deadlineDate: document.getElementById("modalDeadline").value + "T23:59:59",
+        status: document.getElementById("modalStatus").value,
+        eligibility: ["Master's Degree", "UGC-NET / University Entrance"],
+        registrationUrl: document.getElementById("modalUrl").value,
+        infoUrl: document.getElementById("modalUrl").value,
+        description: "User submitted doctoral application alert for open Humanities and Social Sciences seats.",
+        stipend: "Institutional / UGC Fellowship"
+      };
+
+      phdData.unshift(newEntry);
+      try {
+        const customItems = JSON.parse(localStorage.getItem("phd_custom_entries") || "[]");
+        customItems.unshift(newEntry);
+        localStorage.setItem("phd_custom_entries", JSON.stringify(customItems));
+        localStorage.setItem("phd_offline_cache", JSON.stringify(phdData));
+      } catch (e) {}
+
+      addModal.classList.add("hidden");
+      addListingForm.reset();
+      showToast("New PhD alert published successfully!");
+      renderListings();
+    });
+
+    // Modal Control: Alerts Subscription
+    alertsSubscribeBtn.addEventListener("click", () => {
+      alertsModal.classList.remove("hidden");
+    });
+    closeAlertsModalBtn.addEventListener("click", () => {
+      alertsModal.classList.add("hidden");
+    });
+    cancelAlertsModalBtn.addEventListener("click", () => {
+      alertsModal.classList.add("hidden");
+    });
+
+    alertsForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("alertEmail").value;
+      const phone = document.getElementById("alertPhone").value;
+      const subscription = { email, phone, timestamp: new Date().toISOString() };
+      try {
+        localStorage.setItem("phd_user_alerts", JSON.stringify(subscription));
+      } catch (err) {}
+      alertsModal.classList.add("hidden");
+      showToast(`✅ Subscribed! Alerts will be sent to ${email} & +91-${phone}`);
+    });
+
+    // Modal Control: Install Guide
+    installGuideBtn.addEventListener("click", () => {
+      installGuideModal.classList.remove("hidden");
+    });
+    closeInstallGuideBtn.addEventListener("click", () => {
+      installGuideModal.classList.add("hidden");
+    });
+    dismissInstallGuideBtn.addEventListener("click", () => {
+      installGuideModal.classList.add("hidden");
+    });
+
+    // Status Filter Pills
+    document.querySelectorAll(".status-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".status-pill").forEach(b => {
+          b.classList.remove("active", "bg-slate-900", "text-white");
+          b.classList.add("bg-white", "text-slate-600");
+        });
+        btn.classList.add("active", "bg-slate-900", "text-white");
+        btn.classList.remove("bg-white", "text-slate-600");
+        currentStatus = btn.getAttribute("data-filter-status");
+        renderListings();
+      });
+    });
+
+    // Subject Filter Pills
+    document.querySelectorAll(".subject-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".subject-pill").forEach(b => {
+          b.classList.remove("active", "bg-indigo-50", "text-indigo-700", "border-indigo-200");
+          b.classList.add("bg-white", "text-slate-600", "border-slate-200");
+        });
+        btn.classList.add("active", "bg-indigo-50", "text-indigo-700", "border-indigo-200");
+        btn.classList.remove("bg-white", "text-slate-600", "border-slate-200");
+        currentSubject = btn.getAttribute("data-filter-subject");
+        renderListings();
+      });
+    });
+
+    // Search Input
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      if (searchQuery.trim().length > 0) {
+        clearSearchBtn.classList.remove("hidden");
+      } else {
+        clearSearchBtn.classList.add("hidden");
+      }
+      renderListings();
+    });
+
+    clearSearchBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      clearSearchBtn.classList.add("hidden");
+      renderListings();
+    });
+
+    // Urgent closing filter shortcut
+    filterClosingSoonBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      currentStatus = "Open";
+      document.querySelectorAll(".status-pill").forEach((b) => {
+        if (b.getAttribute("data-filter-status") === "Open") {
+          b.classList.add("active", "bg-slate-900", "text-white");
+          b.classList.remove("bg-white", "text-slate-600");
+        } else {
+          b.classList.remove("active", "bg-slate-900", "text-white");
+          b.classList.add("bg-white", "text-slate-600");
+        }
+      });
+      renderListings();
+      showToast("Filtered by Open admissions closing soon");
+    });
+
+    // Sync button simulate
+    refreshSyncBtn.addEventListener("click", () => {
+      showToast("🔄 Connecting to admissions feed... Synced!");
+    });
+
+    // Bulk Export to Calendar
+    exportAllCalBtn.addEventListener("click", () => {
+      exportAllToCalendar();
+    });
+
+    // Saved Toggle
+    savedFilterBtn.addEventListener("click", () => {
+      showSavedOnly = !showSavedOnly;
+      if (showSavedOnly) {
+        savedFilterBtn.classList.add("bg-indigo-50", "border-indigo-200", "text-indigo-700");
+        savedFilterBtn.classList.remove("text-slate-700");
+      } else {
+        savedFilterBtn.classList.remove("bg-indigo-50", "border-indigo-200", "text-indigo-700");
+        savedFilterBtn.classList.add("text-slate-700");
+      }
+      renderListings();
+    });
+
+    // Reset Filters
+    resetFiltersBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      searchQuery = "";
+      clearSearchBtn.classList.add("hidden");
+      currentStatus = "all";
+      currentSubject = "all";
+      showSavedOnly = false;
+      savedFilterBtn.classList.remove("bg-indigo-50", "border-indigo-200", "text-indigo-700");
+      savedFilterBtn.classList.add("text-slate-700");
+
+      document.querySelectorAll(".status-pill").forEach((b, i) => {
+        if (i === 0) {
+          b.classList.add("active", "bg-slate-900", "text-white");
+          b.classList.remove("bg-white", "text-slate-600");
+        } else {
+          b.classList.remove("active", "bg-slate-900", "text-white");
+          b.classList.add("bg-white", "text-slate-600");
+        }
+      });
+
+      document.querySelectorAll(".subject-pill").forEach((b, i) => {
+        if (i === 0) {
+          b.classList.add("active", "bg-indigo-50", "text-indigo-700", "border-indigo-200");
+          b.classList.remove("bg-white", "text-slate-600", "border-slate-200");
+        } else {
+          b.classList.remove("active", "bg-indigo-50", "text-indigo-700", "border-indigo-200");
+          b.classList.add("bg-white", "text-slate-600", "border-slate-200");
+        }
+      });
+
+      renderListings();
+    });
+
+    // Initial run
+    updateSavedBadge();
+    renderListings();
+  </script>
+</body>
+</html>
