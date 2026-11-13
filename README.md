@@ -16,3 +16,9 @@ Created by **Vatsal Kumar (Archidyll)**.
 * **Official Direct Portals**: Grounded links directly to verified university admission portals (JNU, Delhi University, University of Hyderabad, TISS, IITs, etc.).
 
 ---
+
+## 🚀 How to Host on GitHub Pages
+1. Fork or clone this repository.
+2. In your repository settings, go to **Settings > Pages**.
+3. Under **Branch**, select `main` and `/ (root)`, then click **Save**.
+4. Your application will be live at `https://<your-username>.github.io/<repo-name>/`.
